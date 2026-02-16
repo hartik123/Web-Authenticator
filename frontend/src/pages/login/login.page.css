@@ -6,11 +6,11 @@
 
 .login-page__form{
     display: flex;
-    flex-direction: "column";
+    flex-direction: column;
 }
 
 .login-page__element{
-    width:"100px";
+    width: 100px;
 }
 
 
@@ -19,5 +19,5 @@
 }
 
 .login-page__error{
-    color:"red";
+    color: red;
 }

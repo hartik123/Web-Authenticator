@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { loginAPI } from "../../apis/login.api";
 import { useNavigate } from "react-router-dom";
-import { setAccessToken } from "../auth/tokenService";
+import { setAccessToken, setRefreshToken } from "../../auth/tokenService";
 
 
 const Login = () => {
@@ -12,7 +12,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    console.log("fiemail: userEmail, password: userPasswordrst", userEmail, userPassword);
     e.preventDefault();
     
     if (!userEmail || !userPassword) {
@@ -24,8 +23,10 @@ const Login = () => {
     try {
       const data = await loginAPI({ email: userEmail, password: userPassword });
       if (data.token) {
-        // localStorage.setItem("token", data.token);
         setAccessToken(data.token);
+        if (data.refreshToken) {
+          setRefreshToken(data.refreshToken);
+        }
        navigate("/me");
       } else {
         setError(data.message);
@@ -75,7 +76,7 @@ const Login = () => {
       </form>
       <button
           className="login-page__submit_button"
-          type="submit"
+          type="button"
           onClick={()=>navigate('/signup')}
         >
           Sign up

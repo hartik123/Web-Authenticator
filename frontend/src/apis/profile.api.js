@@ -2,12 +2,9 @@ import { apiFetch } from "./apiFetch";
 
 const meURL = 'http://localhost:8000/user/me';
 
-export const fetchProfile = (token)=>{
-    return apiFetch(`${meURL}`, {
-        method:"GET",
-        headers:{
-            Authorization: `Bearer ${token}`
-        }
+export const fetchProfile = () => {
+    return apiFetch(meURL, {
+        method: "GET"
     })
-    .then(res=>res.json());
+    .then(res => res.json());
 }

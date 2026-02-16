@@ -1,4 +1,3 @@
-const User = require('../model/user.model');
 const userAccounts = require('../data/user.data');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -69,12 +68,21 @@ exports.login = async ({ email, password }) => {
         throw new Error('Invalid email or password');
     }
 
-    // create token
+    // create tokens
     const token = jwt.sign(
         { id: user._id },
         process.env.JWT_SECRET,
-        { expiresIn: "1d" }
+        { expiresIn: "15m" }
     )
+
+    const refreshToken = jwt.sign(
+        { id: user._id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: "7d" }
+    )
+
+    // Store refresh token on the user
+    user.refreshToken = refreshToken;
 
     return {
         user: {
@@ -82,6 +90,7 @@ exports.login = async ({ email, password }) => {
             name: user.name,
             email: user.email
         },
-        token
+        token,
+        refreshToken
     }
 }

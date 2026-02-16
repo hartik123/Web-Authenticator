@@ -3,21 +3,23 @@ import { useEffect } from "react";
 import { fetchProfile } from "../../apis/profile.api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAccessToken, clearAccessToken, getRefreshToken, clearRefreshToken } from "../../auth/tokenService";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const profileHandler = async () => {
-    const token = localStorage.getItem("token");
-    console.log("TOKEN", token);
+    const token = getAccessToken();
     if (!token) {
       setError("Unauthorized please login");
+      setLoading(false);
       return;
     }
     try {
-      const data = await fetchProfile(token);
+      const data = await fetchProfile();
       if (data?.user?.name) {
         setUserName(data.user.name);
       } else {
@@ -26,15 +28,24 @@ const Profile = () => {
     } catch (error) {
       setError(error.message);
     } finally {
+      setLoading(false);
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      localStorage.removeItem("token");
+      const refreshToken = getRefreshToken();
+      // Call backend logout to invalidate refresh token
+      await fetch("http://localhost:8000/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken })
+      });
     } catch (error) {
       console.error("Error logging out", error.message);
     } finally {
+      clearAccessToken();
+      clearRefreshToken();
       navigate("/login");
     }
   };
@@ -43,7 +54,9 @@ const Profile = () => {
     profileHandler();
   }, []);
 
-  if (error) {
+  if (loading) {
+    return (<div>Loading...</div>);
+  } else if (error) {
     return (
       <div>
         {error}

@@ -38,12 +38,6 @@ exports.login = async (req, res) => {
 
         const result = await authService.login({ email, password });
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure:true,
-            sameSite: "Strict",
-            maxAge: 7*24*60*60*1000
-        })
         return res.status(200).json({
             message: "Login successful",
             ...result
@@ -100,15 +94,9 @@ exports.refresh = async (req, res) => {
 
 exports.logout = (req, res) => {
     const { refreshToken } = req.body;
-    const userWithRefreshToken = userAccounts.find(user => user.refreshToken === refreshToken);
+    const user = userAccounts.find(u => u.refreshToken === refreshToken);
     if (user) {
-        userWithRefreshToken.refreshToken = null;
-        userAccounts = userAccounts.map(user => {
-            if (user.refreshToken === refreshToken) {
-                return userWithRefreshToken;
-            }
-            return user;
-        })
+        user.refreshToken = null;
     }
     res.status(200).json({
         message: "Logged out Successfully"

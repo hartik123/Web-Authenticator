@@ -1,30 +1,14 @@
-/* me='signup-page__container'>
-        <div className='signup-page__form'>
-          <div className='signup-page__element'>
-            <label className='signup-page__label'>Enter name</label>
-            <input className='signup-page__input' placeholder='Enter name' value={userName} onChange={e=>setUserName(e.target.value)}/>
-          </div>
-          <div className='signup-page__element'>
-            <label className='signup-page__label'>Enter email</label>
-            <input className='signup-page__input' placeholder='Enter email' value={userEmail}  onChange={e=>setUserEmail(e.target.value)}/>
-          </div>
-          <div className='signup-page__element'>
-            <label className='signup-page__label'>Enter password</label>
-            <input className='signup-page__input' placeholder='Enter password' value={userPassword}  onChange={e=>setUserPassword(e.target.value)}/>
-          </div>
-          <button lassName='signup-page__submit_button'  */
-
 .signup-page__container{
     text-align: center;
 }
 
 .signup-page__form{
     display: flex;
-    flex-direction: "column";
+    flex-direction: column;
 }
 
 .signup-page__element{
-    width:"100px";
+    width: 100px;
 }
 
 
@@ -33,5 +17,5 @@
 }
 
 .signup-page__error{
-    color:"red";
+    color: red;
 }

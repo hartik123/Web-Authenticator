@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { signUpAPI } from "../../apis/signup.api";
 import { useNavigate } from "react-router-dom";
+import { setAccessToken, setRefreshToken } from "../../auth/tokenService";
 
 const SignUp = () => {
   const [userName, setUserName] = useState("");
@@ -22,7 +23,10 @@ const SignUp = () => {
     try {
       const data = await signUpAPI({ name: userName, email: userEmail, password: userPassword });
       if (data.token) {
-        localStorage.setItem("token", data.token);
+        setAccessToken(data.token);
+        if (data.refreshToken) {
+          setRefreshToken(data.refreshToken);
+        }
         navigate("/me");
       } else {
         setError(data.message);
