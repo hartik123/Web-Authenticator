@@ -1,0 +1,23 @@
+
+
+.login-page__container{
+    text-align: center;
+}
+
+.login-page__form{
+    display: flex;
+    flex-direction: "column";
+}
+
+.login-page__element{
+    width:"100px";
+}
+
+
+.login-page__input{
+    width: 100%;
+}
+
+.login-page__error{
+    color:"red";
+}
